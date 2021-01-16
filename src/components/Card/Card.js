@@ -17,9 +17,9 @@ const PokemonCard = styled.div`
     position: absolute;
     height: 100%;
     width: 100%;
-    background-color: white;
     line-height: 200px;
     color: #000;
+    border: 2px solid #000;
     text-align: center;
     font-size: 60px;
     border-radius: 500px;
@@ -30,18 +30,26 @@ const PokemonCard = styled.div`
 
   .front {
     background-image: url(${pokeballBg});
-    background-size: cover;
+    background-size: 120%;
+    background-color: #fff;
+    background-position: center;
   }
 
   .back {
-    background: #fff;
+    background-color: #fff;
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
     color: #000;
     transform: rotateY( 180deg );
   }
 
-  &.visible .content {
-    transform: rotateY( 180deg ) ;
-    transition: transform 0.5s;
+  &.visible {
+    pointer-events: none;
+    .content {
+      transform: rotateY( 180deg ) ;
+      transition: transform 0.5s;
+    }
   }
   &.captured {
     .front, .back {
@@ -61,7 +69,7 @@ const PokemonCard = styled.div`
 `;
 
 
-const Card = ({id, name, captured, interactions, flipCard, lost}) => { 
+const Card = ({id, name, picture, captured, interactions, flipCard, lost}) => { 
 
   const [cardFlipState, setCardFlipState] = useState(false);
 
@@ -86,7 +94,7 @@ const Card = ({id, name, captured, interactions, flipCard, lost}) => {
     <PokemonCard onClick={(e) => toggleCard(e)} className={`${flippedStatus} ${capturedStatus} ${clicStatus}`}>
       <div className="content">
         <div className="front"></div>
-        <div className="back">{ name }</div>
+        <div className="back" style={{backgroundImage: `url(./${picture})`}}></div>
       </div>
     </PokemonCard>
   )

@@ -6,7 +6,7 @@ import styled from 'styled-components';
 const Plate = styled.section`
   display: flex;
   min-height: 100vh;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center; 
   align-items: center;
   h1 {
@@ -19,14 +19,32 @@ const Plate = styled.section`
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: 200px 200px 200px 200px;
-  grid-template-rows: 200px 200px 200px 200px; 
-  grid-gap: 12px;
-`
+  grid-template-columns: calc(70vh / 4) calc(70vh / 4) calc(70vh / 4) calc(70vh / 4);
+  grid-template-rows: calc(70vh / 4) calc(70vh / 4) calc(70vh / 4) calc(70vh / 4); 
+  grid-gap: 2vw;
+  @media screen and (orientation: portrait) {
+    grid-template-columns: calc(35vh / 4) calc(35vh / 4) calc(35vh / 4) calc(35vh / 4);
+    grid-template-rows: calc(35vh / 4) calc(35vh / 4) calc(35vh / 4) calc(35vh / 4); 
+  }
+`;
+
+const ScoreBoard = styled.div`
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  .title {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+`;
+
+const Counter = styled.span`
+
+`;
 
 const GameGrid = () => {
 
-  // Create grid size from number of pair
   const createGrid = () => {
     let list = pokemonsList.slice(0)
     let clonedList = [...list]
@@ -85,6 +103,7 @@ const GameGrid = () => {
   const [gridCreated, setGridCreated] = useState(false);
   const [interactions, setInteractions] = useState(true);
   const [lost, setLost] = useState(false);
+  const [endGame, setFinished] = useState(false)
 
   useEffect(() => {
     if (!gridCreated) {
@@ -101,7 +120,10 @@ const GameGrid = () => {
   return (
     <>
       <Plate>
-        <h1>MemoMon</h1>
+        {/* <ScoreBoard>
+          <div className="title">Score Board</div>
+          <Counter></Counter>
+        </ScoreBoard> */}
         <Grid>
           {
             pairsList.map((card, index) => (
@@ -109,6 +131,7 @@ const GameGrid = () => {
                 key={index} 
                 id={card.id} 
                 name={card.name} 
+                picture={card.picture}
                 captured={card.captured}
                 flipped={card.flipped}
                 interactions={interactions} 
