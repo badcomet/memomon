@@ -28,6 +28,28 @@ const Grid = styled.div`
   }
 `;
 
+const ReplayContainer = styled.section`
+  display: flex; 
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  h3 {
+    color: #fff;
+    font-size: 2.8rem;
+  }
+`;
+
+const ReplayButton = styled.div`
+  background-color: #ffc31e;
+  color: #212437;
+  font-size: 1.5rem;
+  padding: .8rem 1.38rem;
+  border-radius: 50px;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
 const ScoreBoard = styled.div`
   color: #fff;
   display: flex;
@@ -45,33 +67,20 @@ const Counter = styled.span`
 
 const GameGrid = () => {
 
-  const createGrid = () => {
-    let list = pokemonsList.slice(0)
-    let clonedList = [...list]
-    let completeList = [...list, ...clonedList]
-    const shuffledList = completeList.sort(() => Math.random() - 0.5)
-    setPairsList(shuffledList);
-    setGridCreated(true);
-  }
-
   const flipCard = (id) => {
-    console.log(id)
     setFlippeds([...flippedCards, id])
   }
 
   const checkPair = () => {
-    console.log('check pair now!')
     if (flippedCards.every(v => v === flippedCards[0])) {
-      console.log('win!')
       setTimeout(() => {
         vanishCard(flippedCards.slice(1));
         setFlippeds([]);
       }, 1500);
       setTimeout(() => {
         setInteractions(true)
-      }, 2000);
+      }, 1800);
     } else {
-      console.log('lost')
       setFlippeds([]);
       setTimeout(() => {
         setLost(true)
@@ -79,23 +88,25 @@ const GameGrid = () => {
       setTimeout(() => {
         setInteractions(true)
         setLost(false)
-      }, 2000);
+      }, 1800);
     }
   }
 
   const vanishCard = (id) => {
-    console.log(`vanish the card with id : ${id}`);
     let intId = parseInt(id, 10);
+    setCaptured(captured + 1);
     let newPairsList = pairsList.map(card => {
-        console.log(card);
         if (card.id === intId) {
-          console.log('blop')
           card.captured = true;
         }
         return card;
     });
-    console.log(newPairsList);
     setPairsList(newPairsList);
+  }
+
+  const restartGame = () => {
+    setGridCreated(false);
+    setFinished(false);
   }
 
   const [pairsList, setPairsList] = useState([]);
@@ -103,19 +114,39 @@ const GameGrid = () => {
   const [gridCreated, setGridCreated] = useState(false);
   const [interactions, setInteractions] = useState(true);
   const [lost, setLost] = useState(false);
-  const [endGame, setFinished] = useState(false)
+  const [captured, setCaptured] = useState(0);
+  const [finished, setFinished] = useState(false)
 
   useEffect(() => {
+
+    const createGrid = () => {
+      let list = pokemonsList.slice(0)
+      let clonedList = [...list]
+      let completeList = [...list, ...clonedList]
+      const shuffledList = completeList.sort(() => Math.random() - 0.5);
+      let unPlayedCards = shuffledList.map(card => {
+        card.captured = false;
+        return card;
+      })
+      setPairsList(unPlayedCards);
+      setCaptured(0);
+      setGridCreated(true);
+    }
+    
     if (!gridCreated) {
-      console.log('whe create the grid one time!')
       createGrid();
     }
     if (flippedCards.length > 1) {
-      console.log('2 cards flipped!')
       setInteractions(false);
       checkPair()
     }
-  }, [flippedCards])
+  }, [flippedCards, gridCreated])
+
+  useEffect(() => {
+    if (captured > 1 && captured === pairsList.length / 2) {
+      setFinished(true);
+    }
+  }, [captured])
 
   return (
     <>
@@ -124,7 +155,9 @@ const GameGrid = () => {
           <div className="title">Score Board</div>
           <Counter></Counter>
         </ScoreBoard> */}
-        <Grid>
+        {
+          !finished &&
+          <Grid>
           {
             pairsList.map((card, index) => (
               <Card 
@@ -142,6 +175,14 @@ const GameGrid = () => {
             ))
           }
         </Grid>
+        }
+        {
+          finished && 
+          <ReplayContainer>
+            <h3>Bien joué !</h3>
+            <ReplayButton onClick={(e) => restartGame()}>Recommencer</ReplayButton>
+          </ReplayContainer>
+        }
       </Plate>
     </>
   )

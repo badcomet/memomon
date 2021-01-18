@@ -75,7 +75,6 @@ const Card = ({id, name, picture, captured, interactions, flipCard, lost}) => {
 
   const toggleCard = (e) => {
     e.stopPropagation();
-    console.log('clicked!');
     setCardFlipState(!cardFlipState);
     flipCard(id)
   }
