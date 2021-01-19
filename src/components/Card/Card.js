@@ -25,7 +25,7 @@ const PokemonCard = styled.div`
     border-radius: 500px;
     backface-visibility: hidden;
     font-size: 32px;
-    transition: .5s all linear;
+    transition: .3s all linear;
   }
 
   .front {
