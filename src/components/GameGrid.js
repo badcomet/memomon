@@ -251,10 +251,8 @@ const GameGrid = () => {
       localStorage.setItem('scores', JSON.stringify([newScore]))
     } else {
       let tempScores = JSON.parse(localScores);
-      console.log(tempScores);
       tempScores.push(newScore);
       let sortedScores = tempScores.sort((a, b) => (a.timer > b.timer) ? 1 : -1);
-      console.log(sortedScores);
       let limitedScores = sortedScores.slice(0, 5);
       localStorage.setItem('scores', JSON.stringify(limitedScores))
     }
@@ -293,7 +291,6 @@ const GameGrid = () => {
       createGrid();
       // Get scores from localStorage
       let localScores = localStorage.getItem('scores');
-      console.log(JSON.parse(localScores));
       setScoreBoard(localScores === null ? [] : JSON.parse(localScores))
     }
 
@@ -336,14 +333,13 @@ const GameGrid = () => {
   }, [captured])
 
   const diplayScoreBoard = () => {
-    console.log(scoreBoard);
-    if (scoreBoard.length > 1) {
+    if (scoreBoard.length >= 1) {
       let sortedScores = scoreBoard.sort((a, b) => (a.timer > b.timer) ? 1 : -1);
       return (
         sortedScores.slice(0, 5).map((score, i) => <li key={i}>{ score.user.name}<span>{ formatTime(score.timer) }</span></li>)
       )
     } else {
-      return <li>Rien à voir par ici...</li>
+      return <li>...</li>
     }
   }
 
