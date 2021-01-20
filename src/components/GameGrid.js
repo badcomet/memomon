@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import pokemonsList from '../pokemonsList';
+import pokemonsList from '../data/pokemon';
 import Card from './Card/Card';
 import useTimer from '../hooks/useTimer';
 import { formatTime } from '../utils';
@@ -130,14 +130,14 @@ const UserCard = styled.div`
 `;
 
 const Avatar = styled.div`
-  width: ${props => props.size === 'big' ? '150' : '50'}px; 
-  height: ${props => props.size === 'big' ? '150' : '50'}px;
+  width: ${props => props.size === 'big' ? '120' : '50'}px; 
+  height: ${props => props.size === 'big' ? '120' : '50'}px;
   background-color: #3f4460;
   background-image: url(${profilePicture});
   background-size: cover;
   background-repeat: no-repeat;
   border-radius: 100px;
-  border: ${props => props.size === 'big' ? '8' : '3'}px solid #fff;
+  border: ${props => props.size === 'big' ? '6' : '3'}px solid #fff;
   margin: 0 1rem;
 `;
 
@@ -258,7 +258,15 @@ const GameGrid = () => {
     }
   }
 
+  const switchGameContext = (gameId) => {
+    // Take gameId
+    // Map Game contexts 
+    // Set Game context
+    // Dynamic import data from list
+  }
+
   const [loaded, setLoaded] = useState(false);
+  const [gameContext, setGameContext] = useState();
   const [pairsList, setPairsList] = useState([]);
   const [flippedCards, setFlippeds] = useState([]);
   const [gridCreated, setGridCreated] = useState(false);
@@ -274,8 +282,9 @@ const GameGrid = () => {
 
   useEffect(() => {
     const createGrid = () => {
-      let list = pokemonsList.slice(0)
+      let list = pokemonsList.sort(() => Math.random() - 0.5).slice(0, 8);
       let clonedList = [...list]
+      console.log(list)
       let completeList = [...list, ...clonedList]
       const shuffledList = completeList.sort(() => Math.random() - 0.5);
       let unPlayedCards = shuffledList.map(card => {
@@ -392,8 +401,8 @@ const GameGrid = () => {
             userCreated && 
             <>
               <UserCard>
-                <Avatar size={'big'}></Avatar>
-                <User size={3}>{ user.name }</User>
+                <Avatar size={'big'} onClick={() => changeUser()}></Avatar>
+                <User size={"2.5"}>{ user.name }</User>
                 <Button active type={"secondary"} onClick={() => changeUser()}>Changer d'utilisateur</Button>
               </UserCard>
               <Button size={"xl"} active={userCreated ? true : false} onClick={(e) => setStarted(true)}>Jouer !</Button>

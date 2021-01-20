@@ -9,6 +9,7 @@
 - [x] Game logics
 - [x] Add score
 - [ ] Choose theme 
+- [ ] Dynamic game context import
 - [ ] Create independants React components
 - [ ] Store scores in MongoDB database 
 - [ ] Generate grid from user's choice
